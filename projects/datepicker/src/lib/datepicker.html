@@ -1,0 +1,12 @@
+<ng-container [formGroup]="dateForm">
+  <input type="tel" matInput formControlName="day" id="day-input" class="section" placeholder="DD" autocomplete="day-in-month" />
+  <span class="seperator">&#47;</span>
+  <mat-select [ngClass]="{ focused: monthSelect.focused }" #monthSelect formControlName="month" id="month-select" class="section">
+    <mat-select-trigger>
+      {{ getMonthAbreviation(dateForm.get('month').value) }}
+    </mat-select-trigger>
+    <mat-option *ngFor="let month of monthsArr" [value]="month.key"> {{ month.value }}</mat-option>
+  </mat-select>
+  <span class="seperator">&#47;</span>
+  <input type="tel" matInput formControlName="year" id="year-select" class="section" placeholder="YYYY" autocomplete="year" />
+</ng-container>

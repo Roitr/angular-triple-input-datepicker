@@ -1,0 +1,10 @@
+{
+  "name": "@covercy/datepicker",
+  "version": "1.0.3",
+  "peerDependencies": {
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0",
+    "@angular/material": "^7.3.0",
+    "@angular/cdk": "~7.3.7"
+  }
+}
