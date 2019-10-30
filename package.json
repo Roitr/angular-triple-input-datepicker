@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-datepicker": "ng build datepicker",
-    "publish-datepicker": "ng build datepicker && cd dist/datepicker && npm publish --access=public"
+    "publish-datepicker": "ng build datepicker && cd dist/datepicker && npm publish --access=public",
+    "serve-test": "ng serve datepickertest --port=5200"
   },
   "private": true,
   "dependencies": {

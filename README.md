@@ -1,27 +1,20 @@
 # Datepicker
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.9.
+GitHub: https://github.com/Roitr/angular-triple-input-datepicker
 
-## Development server
+Currently contains only a triple-inputs datepicker (text input for day and year, and a drop-down for month).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- It should work well inside any angular form, 
 
-## Code scaffolding
+- Supports angular material (can be used inside of a mat-form-field)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Supports both 'day/month/year' and 'month/day/year' (default) formats;
 
-## Build
+  To change the input order, simply use the order property, and give it "d/m/y", or "m/d/y" like this: order="d/m/y"
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+- Will give an error (invalidDate) if the selected date is not a valid date (in terms of structure and invalid inputs).
 
-## Running unit tests
+- Supports min and max dates (gives a minDate and maxDate errors).
+  Because the user can only select a date, without time, when providing a min/max date objects, only the date section will be used.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  Feel free to contribute and help me improve this package :).

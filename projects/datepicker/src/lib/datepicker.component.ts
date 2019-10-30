@@ -1,13 +1,27 @@
 // tutorial from: https://material.angular.io/guide/creating-a-custom-form-field-control
 
-import { Component, OnInit, Input, Inject, LOCALE_ID, OnDestroy, HostBinding, Optional, Self, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Inject,
+  LOCALE_ID,
+  OnDestroy,
+  HostBinding,
+  Optional,
+  Self,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, ControlValueAccessor, NgControl, FormControl } from '@angular/forms';
 import { KeyValue, formatDate } from '@angular/common';
 import { MatFormFieldControl } from '@angular/material';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject, merge } from 'rxjs';
-import { isDate } from 'util';
+import { debounceTime } from 'rxjs/operators';
+import { isDate, isString } from 'util';
+
 
 @Component({
   selector: 'cov-datepicker-triple',
@@ -22,9 +36,18 @@ import { isDate } from 'util';
 })
 // tslint:disable-next-line: component-class-suffix
 export class CovDatepickerTriple implements OnInit, OnDestroy, ControlValueAccessor, MatFormFieldControl<Date> {
+
   static nextId = 0;
 
   @HostBinding() id = `cov-triple-date-picker-${CovDatepickerTriple.nextId++}`;
+
+  @HostBinding('class') hostClass = 'm/d/y';
+  @Input()
+  order: ('m/d/y' | 'd/m/y') = 'd/m/y';
+
+  @ViewChild('day-input') dayInput: ElementRef;
+  @ViewChild('month-select') monthInput: ElementRef;
+  @ViewChild('year-input') yearInput: ElementRef;
 
   @Input()
   get value(): Date | null {
@@ -67,7 +90,9 @@ export class CovDatepickerTriple implements OnInit, OnDestroy, ControlValueAcces
     return this.minPrivate;
   }
   set min(value: Date | string) {
-    this.minPrivate = new Date(value);
+    // take only the date part (because the datepicker only allows selecting the date, and the uesr can't see the time part)
+    const dateToSet = new Date(value);
+    this.minPrivate = new Date(dateToSet.getFullYear(), dateToSet.getMonth(), dateToSet.getDate());
   }
   private minPrivate;
 
@@ -78,7 +103,9 @@ export class CovDatepickerTriple implements OnInit, OnDestroy, ControlValueAcces
     return this.maxPrivate;
   }
   set max(value: Date | string) {
-    this.maxPrivate = new Date(value);
+    // take only the date part (because the datepicker only allows selecting the date, and the uesr can't see the time part)
+    const dateToSet = new Date(value);
+    this.maxPrivate = new Date(dateToSet.getFullYear(), dateToSet.getMonth(), dateToSet.getDate());
   }
   private maxPrivate;
 
@@ -147,12 +174,19 @@ export class CovDatepickerTriple implements OnInit, OnDestroy, ControlValueAcces
   }
 
   ngOnInit() {
+    this.setOrder();
+
     if (this.ngControl.control.validator) {
       this.ngControl.control.setValidators([this.ngControl.control.validator, this.validate.bind(this)]);
     } else {
       this.ngControl.control.setValidators(this.validate.bind(this));
     }
     this.ngControl.control.updateValueAndValidity();
+  }
+
+  setOrder() {
+    const order = this.order.toLowerCase().trim() || 'm/d/y';
+    this.hostClass = order;
   }
 
   generateMonthsArray(): Array<KeyValue<number, string>> {
@@ -165,16 +199,19 @@ export class CovDatepickerTriple implements OnInit, OnDestroy, ControlValueAcces
   }
 
   // BEGIN - ControlValueAccessor methods:
-  writeValue(date: Date): void {
-    this.value = date;
-    this.setForm(date);
+  writeValue(paramValue: Date | string): void {
+    if (paramValue) {
+      this.value = new Date(paramValue);
+    }
+    this.setForm(this.value);
     this.stateChanges.next();
   }
 
   registerOnChange(fn: any): void {
-    const yearChange = this.dateForm.get('year').valueChanges;
-    const monthChange = this.dateForm.get('month').valueChanges;
-    const dayChange = this.dateForm.get('day').valueChanges;
+    const debounce = debounceTime(150);
+    const yearChange = this.dateForm.get('year').valueChanges.pipe(debounce);
+    const monthChange = this.dateForm.get('month').valueChanges.pipe(debounce);
+    const dayChange = this.dateForm.get('day').valueChanges.pipe(debounce);
 
     merge(yearChange, monthChange, dayChange)
       .subscribe(() => {
