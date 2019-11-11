@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CovDatepickerTriple } from './datepicker.component';
+import { CovDatepickerTriple } from './datepicker-triple.component';
 
 describe('DatepickerComponent', () => {
   let component: CovDatepickerTriple;
