@@ -1,10 +1,14 @@
 {
   "name": "@covercy/datepicker",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "peerDependencies": {
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0",
     "@angular/material": "^7.3.0",
     "@angular/cdk": "~7.3.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Roitr/angular-triple-input-datepicker.git"
   }
 }
