@@ -311,12 +311,11 @@ export class CovDatepickerTriple extends _CovDatepickerTripleMixinBase implement
 
   ngOnInit() {
     this.setOrder();
-    // if (this.ngControl.control.validator) {
-    //   this.ngControl.control.setValidators([this.ngControl.control.validator, this.validate.bind(this)]);
-    // }
-    // else {
+    if (this.ngControl.control.validator) {
+      this.ngControl.control.setValidators([this.ngControl.control.validator, this.validate.bind(this)]);
+    } else {
     this.ngControl.control.setValidators(this.validate.bind(this));
-    // }
+    }
     this.ngControl.control.updateValueAndValidity();
   }
 
